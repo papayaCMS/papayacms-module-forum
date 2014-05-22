@@ -1,9 +1,5 @@
 <?php
-include_once(dirname(__FILE__).'/../../../../bootstrap.php');
-PapayaTestCase::registerPapayaAutoloader(
-  array(),
-  'modules/free/forum/_classmap.php'
-);
+include_once(dirname(__FILE__).'/bootstrap.php');
 PapayaTestCase::defineConstantDefaults(
   'PAPAYA_DB_URI',
   'PAPAYA_DB_TABLEPREFIX',
