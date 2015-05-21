@@ -13,7 +13,6 @@
   "require-dev": {
     "papaya/test-framework": "*",
     "papaya/cms-administration": "*",
-    "papaya/theme-dynamic": "*",
-    "papaya/module-community": "dev-master",
+    "papaya/theme-dynamic": "*"
   }
 }
