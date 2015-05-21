@@ -7,11 +7,13 @@
     "document-root" : "htdocs/"
   },
   "require": {
-    "papaya/cms-core": "*"
+    "papaya/cms-core": "*",
+    "papaya/module-community": "dev-master"
   },
   "require-dev": {
     "papaya/test-framework": "*",
     "papaya/cms-administration": "*",
-    "papaya/theme-dynamic": "*"
+    "papaya/theme-dynamic": "*",
+    "papaya/module-community": "dev-master",
   }
 }
