@@ -1810,7 +1810,7 @@ class base_forum extends base_db {
   *
   * Before the entry is added to the database, this method will check
   * if there allready is a previous post with the same contents, which
-  * came from the same user. This indicates a double post wich is
+  * came from the same user. This indicates a double post if the moduloptions is
   * prevented.
   *
   * @param array $entryData
@@ -1866,8 +1866,12 @@ class base_forum extends base_db {
       $entryData['entry_strip']
     );
     if ($res = $this->databaseQueryFmt($sql, $params)) {
+      $allowDoublePost = $options->get(
+        'ALLOW_DOUBLE_POSTS', 0
+      );
+
       //check for duplicates
-      if ($res->fetchField() == 0) {
+      if ($res->fetchField() == 0 || $allowDoublePost) {
         $res->free();
 
         if (isset($this->entry)) {
