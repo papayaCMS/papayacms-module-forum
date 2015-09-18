@@ -1813,8 +1813,6 @@ class base_forum extends base_db {
    * came from the same user. This indicates a double post if the moduloptions is
    * prevented.
    *
-   *
-   *
    * @param array $entryData
    * @param boolean $richtextEnabled optional, default FALSE
    * @access public
