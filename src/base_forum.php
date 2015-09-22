@@ -1870,7 +1870,7 @@ class base_forum extends base_db {
         'ALLOW_DOUBLE_POSTS', 0
       );
       //check for duplicates
-      if ($res->fetchField() == 0  || $allowDoublePost) {
+      if ($res->fetchField() == 0 || $allowDoublePost) {
         $res->free();
 
         if (isset($this->entry)) {
