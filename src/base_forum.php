@@ -1784,40 +1784,40 @@ class base_forum extends base_db {
   }
 
   /**
-   * Add a new entry.
-   *
-   * When successfull the newly created entryId will be returned,
-   * otherwise FALSE will be returned.
-   *
-   * When a parentId is provided, the thread will be
-   * updated to generate a thread-modififcation timestamp. The thread
-   * count of the thread will be increased by one. The provided
-   * array entryData consists of key-value paris, with optional fields to store.
-   *
-   * The field entry_text, when provided will be checked for
-   * html tags and a tag-less copy of it will be set into
-   * entry_strip to enable full text search on formatted text.
-   *
-   * When this method is called in the output context, a class variable
-   * set of user data is interpreted to store the entry editor as well.
-   * When the surfer is not logged in, it is important that the fields
-   * entry_username, entry_useremail, entry_userhandle are set within
-   * the provided data array. Otherwise the entry will remain without
-   * a user reference.
-   *
-   * The fields entry_created, entry_modified, entry_ip, entry_path and
-   * entry_userregistered will always be set by this function.
-   *
-   * Before the entry is added to the database, this method will check
-   * if there allready is a previous post with the same contents, which
-   * came from the same user. This indicates a double post if the moduloptions is
-   * prevented.
-   *
-   * @param array $entryData
-   * @param boolean $richtextEnabled optional, default FALSE
-   * @access public
-   * @return int|boolean $entryId or FALSE
-   */
+  * Add a new entry.
+  *
+  * When successfull the newly created entryId will be returned,
+  * otherwise FALSE will be returned.
+  *
+  * When a parentId is provided, the thread will be
+  * updated to generate a thread-modififcation timestamp. The thread
+  * count of the thread will be increased by one. The provided
+  * array entryData consists of key-value paris, with optional fields to store.
+  *
+  * The field entry_text, when provided will be checked for
+  * html tags and a tag-less copy of it will be set into
+  * entry_strip to enable full text search on formatted text.
+  *
+  * When this method is called in the output context, a class variable
+  * set of user data is interpreted to store the entry editor as well.
+  * When the surfer is not logged in, it is important that the fields
+  * entry_username, entry_useremail, entry_userhandle are set within
+  * the provided data array. Otherwise the entry will remain without
+  * a user reference.
+  *
+  * The fields entry_created, entry_modified, entry_ip, entry_path and
+  * entry_userregistered will always be set by this function.
+  *
+  * Before the entry is added to the database, this method will check
+  * if there allready is a previous post with the same contents, which
+  * came from the same user. This indicates a double post if the moduloptions is
+  * prevented.
+  *
+  * @param array $entryData
+  * @param boolean $richtextEnabled optional, default FALSE
+  * @access public
+  * @return int|boolean $entryId or FALSE
+  */
   function addEntry($entryData, $richtextEnabled = FALSE, $mode = 0) {
     /** @var PapayaConfiguration $options */
     $options = $this->papaya()->plugins->options[$this->_edModuleGuid];
