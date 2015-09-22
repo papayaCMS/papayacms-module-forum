@@ -1818,7 +1818,7 @@ class base_forum extends base_db {
   * @access public
   * @return int|boolean $entryId or FALSE
   */
-  function addEntry($entryData, $richtextEnabled = FALSE) {
+  function addEntry($entryData, $richtextEnabled = FALSE, $mode = 0) {
     /** @var PapayaConfiguration $options */
     $options = $this->papaya()->plugins->options[$this->_edModuleGuid];
     // make sure whitespace do not count as content
@@ -1869,7 +1869,6 @@ class base_forum extends base_db {
       $allowDoublePost = $options->get(
         'ALLOW_DOUBLE_POSTS', 0
       );
-
       //check for duplicates
       if ($res->fetchField() == 0 || $allowDoublePost) {
         $res->free();
@@ -1902,14 +1901,28 @@ class base_forum extends base_db {
           (!empty($this->surfer['surfer_id'])) ? $this->surfer['surfer_id'] : '';
 
         if ($entryId = $this->databaseInsertRecord($this->tableEntries, 'entry_id', $entryData)) {
+          $threadId = $entryData['entry_pid'];
+
+          if ($mode == 1) {
+            $threadId = $this->getThreadIdByPath($entryData);
+          }
+
           $this->entryTree[$entryData['entry_pid']][] = $entryId;
-          $this->updateThread($entryData['entry_pid']);
+          $this->updateThread($threadId);
           $this->updatePath($entryData['entry_path']);
           return $entryId;
         }
       }
     }
     return FALSE;
+  }
+
+  private function getThreadIdByPath($entryData) {
+    if ($entryData['entry_path'] != '') {
+      $thread = explode(';',$entryData['entry_path']);
+      return (int)$thread[1];
+    }
+    return (int)$entryData['entry_path'];
   }
 
   /**
