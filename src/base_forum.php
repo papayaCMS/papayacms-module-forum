@@ -1784,41 +1784,41 @@ class base_forum extends base_db {
   }
 
   /**
-  * Add a new entry.
-  *
-  * When successfull the newly created entryId will be returned,
-  * otherwise FALSE will be returned.
-  *
-  * When a parentId is provided, the thread will be
-  * updated to generate a thread-modififcation timestamp. The thread
-  * count of the thread will be increased by one. The provided
-  * array entryData consists of key-value paris, with optional fields to store.
-  *
-  * The field entry_text, when provided will be checked for
-  * html tags and a tag-less copy of it will be set into
-  * entry_strip to enable full text search on formatted text.
-  *
-  * When this method is called in the output context, a class variable
-  * set of user data is interpreted to store the entry editor as well.
-  * When the surfer is not logged in, it is important that the fields
-  * entry_username, entry_useremail, entry_userhandle are set within
-  * the provided data array. Otherwise the entry will remain without
-  * a user reference.
-  *
-  * The fields entry_created, entry_modified, entry_ip, entry_path and
-  * entry_userregistered will always be set by this function.
-  *
-  * Before the entry is added to the database, this method will check
-  * if there allready is a previous post with the same contents, which
-  * came from the same user. This indicates a double post if the moduloptions is
-  * prevented.
-  *
-  * @param array $entryData
-  * @param boolean $richtextEnabled optional, default FALSE
-  * @access public
-  * @return int|boolean $entryId or FALSE
-  */
-  function addEntry($entryData, $richtextEnabled = FALSE) {
+   * Add a new entry.
+   *
+   * When successfull the newly created entryId will be returned,
+   * otherwise FALSE will be returned.
+   *
+   * When a parentId is provided, the thread will be
+   * updated to generate a thread-modififcation timestamp. The thread
+   * count of the thread will be increased by one. The provided
+   * array entryData consists of key-value paris, with optional fields to store.
+   *
+   * The field entry_text, when provided will be checked for
+   * html tags and a tag-less copy of it will be set into
+   * entry_strip to enable full text search on formatted text.
+   *
+   * When this method is called in the output context, a class variable
+   * set of user data is interpreted to store the entry editor as well.
+   * When the surfer is not logged in, it is important that the fields
+   * entry_username, entry_useremail, entry_userhandle are set within
+   * the provided data array. Otherwise the entry will remain without
+   * a user reference.
+   *
+   * The fields entry_created, entry_modified, entry_ip, entry_path and
+   * entry_userregistered will always be set by this function.
+   *
+   * Before the entry is added to the database, this method will check
+   * if there allready is a previous post with the same contents, which
+   * came from the same user. This indicates a double post if the moduloptions is
+   * prevented.
+   *
+   * @param array $entryData
+   * @param boolean $richtextEnabled optional, default FALSE
+   * @access public
+   * @return int|boolean $entryId or FALSE
+   */
+  function addEntry($entryData, $richtextEnabled = FALSE, $mode = 0) {
     /** @var PapayaConfiguration $options */
     $options = $this->papaya()->plugins->options[$this->_edModuleGuid];
     // make sure whitespace do not count as content
@@ -1869,9 +1869,8 @@ class base_forum extends base_db {
       $allowDoublePost = $options->get(
         'ALLOW_DOUBLE_POSTS', 0
       );
-
       //check for duplicates
-      if ($res->fetchField() == 0 || $allowDoublePost) {
+      if ($res->fetchField() == 0  || $allowDoublePost) {
         $res->free();
 
         if (isset($this->entry)) {
@@ -1902,14 +1901,28 @@ class base_forum extends base_db {
           (!empty($this->surfer['surfer_id'])) ? $this->surfer['surfer_id'] : '';
 
         if ($entryId = $this->databaseInsertRecord($this->tableEntries, 'entry_id', $entryData)) {
+          $threadId = $entryData['entry_pid'];
+
+          if ($mode == 1) {
+            $threadId = $this->getThreadIdByPath($entryData);
+          }
+
           $this->entryTree[$entryData['entry_pid']][] = $entryId;
-          $this->updateThread($entryData['entry_pid']);
+          $this->updateThread($threadId);
           $this->updatePath($entryData['entry_path']);
           return $entryId;
         }
       }
     }
     return FALSE;
+  }
+
+  private function getThreadIdByPath($entryData) {
+    if ($entryData['entry_path'] != '') {
+      $thread = explode(';',$entryData['entry_path']);
+      return (int)$thread[1];
+    }
+    return (int)$entryData['entry_path'];
   }
 
   /**

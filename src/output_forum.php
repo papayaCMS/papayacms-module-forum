@@ -712,7 +712,8 @@ class output_forum extends base_forum {
                       'entry_subject' => $this->outputDialog->data['entry_subject'],
                       'entry_text' => $this->outputDialog->data['entry_text']
                     ),
-                    $this->_moduleConfiguration['richtext_enabled']
+                    $this->_moduleConfiguration['richtext_enabled'],
+                    $this->_moduleConfiguration['mode']
                   );
                   if ($newId) {
                     $this->params['cmd'] = '';
