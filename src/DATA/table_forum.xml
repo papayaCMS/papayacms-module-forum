@@ -5,6 +5,7 @@
     <field name="forum_desc" type="string" size="65535" null="no"/>
     <field name="forumcat_id" type="integer" size="4" null="no"/>
     <field name="forum_title" type="string" size="200" null="no"/>
+    <field name="forum_weight" type="string" size="200" null="no"/>
     <field name="page_id" type="integer" size="4" null="no"/>
     <field name="page_prefix" type="string" size="100" null="no"/>
   </fields>
