@@ -97,6 +97,18 @@ class edmodule_forum extends base_module {
       ),
       NULL,
       0
+    ),
+    'ALLOW_DOUBLE_POSTS' => array(
+        'Allow double posts',
+        'isNum',
+        TRUE,
+        'translatedcombo',
+        array(
+            0 => 'No',
+            1 => 'yes'
+        ),
+        NULL,
+        0
     )
   );
 

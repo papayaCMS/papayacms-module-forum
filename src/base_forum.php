@@ -1810,7 +1810,7 @@ class base_forum extends base_db {
   *
   * Before the entry is added to the database, this method will check
   * if there allready is a previous post with the same contents, which
-  * came from the same user. This indicates a double post wich is
+  * came from the same user. This indicates a double post if the moduloptions is
   * prevented.
   *
   * @param array $entryData
@@ -1818,7 +1818,7 @@ class base_forum extends base_db {
   * @access public
   * @return int|boolean $entryId or FALSE
   */
-  function addEntry($entryData, $richtextEnabled = FALSE) {
+  function addEntry($entryData, $richtextEnabled = FALSE, $mode = 0) {
     /** @var PapayaConfiguration $options */
     $options = $this->papaya()->plugins->options[$this->_edModuleGuid];
     // make sure whitespace do not count as content
@@ -1866,8 +1866,11 @@ class base_forum extends base_db {
       $entryData['entry_strip']
     );
     if ($res = $this->databaseQueryFmt($sql, $params)) {
+      $allowDoublePost = $options->get(
+        'ALLOW_DOUBLE_POSTS', 0
+      );
       //check for duplicates
-      if ($res->fetchField() == 0) {
+      if ($res->fetchField() == 0 || $allowDoublePost) {
         $res->free();
 
         if (isset($this->entry)) {
@@ -1898,14 +1901,28 @@ class base_forum extends base_db {
           (!empty($this->surfer['surfer_id'])) ? $this->surfer['surfer_id'] : '';
 
         if ($entryId = $this->databaseInsertRecord($this->tableEntries, 'entry_id', $entryData)) {
+          $threadId = $entryData['entry_pid'];
+
+          if ($mode == 1) {
+            $threadId = $this->getThreadIdByPath($entryData);
+          }
+
           $this->entryTree[$entryData['entry_pid']][] = $entryId;
-          $this->updateThread($entryData['entry_pid']);
+          $this->updateThread($threadId);
           $this->updatePath($entryData['entry_path']);
           return $entryId;
         }
       }
     }
     return FALSE;
+  }
+
+  private function getThreadIdByPath($entryData) {
+    if ($entryData['entry_path'] != '') {
+      $thread = explode(';',$entryData['entry_path']);
+      return (int)$thread[1];
+    }
+    return (int)$entryData['entry_path'];
   }
 
   /**
