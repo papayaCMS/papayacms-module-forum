@@ -1469,7 +1469,8 @@ class admin_forum extends base_forum {
         );
         $fields = array(
           'forum_title' => array('Title', 'isNoHTML', TRUE, 'input', 200),
-          'forum_desc' => array('Description', 'isNoHTML', FALSE, 'textarea', 8)
+          'forum_desc' => array('Description', 'isNoHTML', FALSE, 'textarea', 8),
+          'forum_weight' => array('Weight', 'isNoHTML', FALSE, 'input', 8, "zzz"),
         );
       } else {
         $useToken = FALSE;
@@ -1477,7 +1478,8 @@ class admin_forum extends base_forum {
         $hidden = NULL;
         $fields = array(
           'forum_title' => array('Title', 'isNoHTML', TRUE, 'info'),
-          'forum_desc' => array('Description', 'isNoHTML', FALSE, 'info')
+          'forum_desc' => array('Description', 'isNoHTML', FALSE, 'info'),
+          'forum_weight' => array('Weight', 'isNoHTML', FALSE, 'input', 8, "zzz")
         );
       }
       $this->forumDialog = new base_dialog(

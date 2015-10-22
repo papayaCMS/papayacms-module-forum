@@ -657,11 +657,11 @@ class base_forum extends base_db {
     } else {
       $categoryFilter = '';
     }
-    $sql = "SELECT f.forum_id, f.forumcat_id, f.forum_title, f.forum_desc,
+    $sql = "SELECT f.forum_id, f.forumcat_id, f.forum_title, f.forum_weight, f.forum_desc,
                    c.forumcat_title
               FROM %s f, %s c
              WHERE f.forumcat_id = c.forumcat_id
-                   $categoryFilter";
+                   $categoryFilter ORDER BY f.forum_weight ASC";
     $params = array($this->tableBoards, $this->tableCategs);
     if ($res = $this->databaseQueryFmt($sql, $params)) {
       $this->boards = array();
