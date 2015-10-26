@@ -661,7 +661,7 @@ class base_forum extends base_db {
                    c.forumcat_title
               FROM %s f, %s c
              WHERE f.forumcat_id = c.forumcat_id
-                   $categoryFilter ORDER BY f.forum_weight ASC";
+                   $categoryFilter ORDER BY f.forum_weight ASC, f.forum_title ASC";
     $params = array($this->tableBoards, $this->tableCategs);
     if ($res = $this->databaseQueryFmt($sql, $params)) {
       $this->boards = array();
