@@ -57,7 +57,7 @@
 *
 * @package Papaya-Modules
 * @subpackage Free-Forum
-* @version $Id: base_forum.php 39732 2014-04-08 15:34:45Z weinert $
+* @version $Id: base_forum.php 39994 2015-10-22 08:26:37Z kersken $
 */
 
 /**
@@ -745,15 +745,15 @@ class base_forum extends base_db {
     $this->boards = array();
     $this->boardCount = 0;
     if ($categoryId > 0) {
-      $sql = "SELECT forum_id, forumcat_id, forum_title, forum_desc
+      $sql = "SELECT forum_id, forumcat_id, forum_title, forum_desc, forum_weight
                 FROM %s
                WHERE forumcat_id = %d
-               ORDER BY forum_title ASC, forum_id ASC";
+               ORDER BY forum_weight, forum_title ASC, forum_id ASC";
       $params = array($this->tableBoards, (int)$categoryId);
     } else {
-      $sql = "SELECT forum_id, forumcat_id, forum_title, forum_desc
+      $sql = "SELECT forum_id, forumcat_id, forum_title, forum_desc, forum_weight
                 FROM %s
-               ORDER BY forum_title ASC, forum_id ASC";
+               ORDER BY forum_weight, forum_title ASC, forum_id ASC";
       $params = $this->tableBoards;
     }
     if ($res = $this->databaseQueryFmt($sql, $params, $limit, $offset)) {
@@ -779,7 +779,7 @@ class base_forum extends base_db {
   */
   function loadBoard($forumId) {
     unset($this->board);
-    $sql = "SELECT forum_id, forumcat_id, forum_title, forum_desc
+    $sql = "SELECT forum_id, forumcat_id, forum_title, forum_desc, forum_weight
               FROM %s
              WHERE forum_id = %d
              ORDER BY forum_title ASC, forum_id ASC";

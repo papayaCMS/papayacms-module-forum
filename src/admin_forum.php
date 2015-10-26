@@ -14,7 +14,7 @@
 *
 * @package Papaya-Modules
 * @subpackage Free-Forum
-* @version $Id: admin_forum.php 39818 2014-05-13 13:15:13Z weinert $
+* @version $Id: admin_forum.php 39994 2015-10-22 08:26:37Z kersken $
 */
 
 /**
@@ -1365,6 +1365,7 @@ class admin_forum extends base_forum {
   function saveForum() {
     $data = array(
       'forum_title' => $this->params['forum_title'],
+      'forum_weight' => $this->params['forum_weight'],
       'forum_desc' => $this->params['forum_desc']
     );
     return FALSE !== $this->databaseUpdateRecord(
@@ -1470,7 +1471,7 @@ class admin_forum extends base_forum {
         $fields = array(
           'forum_title' => array('Title', 'isNoHTML', TRUE, 'input', 200),
           'forum_desc' => array('Description', 'isNoHTML', FALSE, 'textarea', 8),
-          'forum_weight' => array('Weight', 'isNoHTML', FALSE, 'input', 8, "zzz"),
+          'forum_weight' => array('Weight', 'isNoHTML', FALSE, 'input', 8),
         );
       } else {
         $useToken = FALSE;
@@ -1479,7 +1480,7 @@ class admin_forum extends base_forum {
         $fields = array(
           'forum_title' => array('Title', 'isNoHTML', TRUE, 'info'),
           'forum_desc' => array('Description', 'isNoHTML', FALSE, 'info'),
-          'forum_weight' => array('Weight', 'isNoHTML', FALSE, 'input', 8, "zzz")
+          'forum_weight' => array('Weight', 'isNoHTML', FALSE, 'input', 8),
         );
       }
       $this->forumDialog = new base_dialog(
